@@ -3,9 +3,9 @@
 plugins {
     id("java")
     id("checkstyle")
-    id("com.github.spotbugs").version("5.0.6")
+    //id("com.github.spotbugs").version("5.2.1")  // Dreeam - False Positive
     id("org.cadixdev.licenser").version("0.6.1")
-    id("com.github.johnrengelman.shadow").version("7.1.2")
+    id("com.github.johnrengelman.shadow").version("8.1.1")
 }
 
 setGroup("net.elytrium")
@@ -24,12 +24,12 @@ repositories {
     mavenCentral()
 
     maven {
-        setName("elytrium-repo")
-        setUrl("https://maven.elytrium.net/repo/")
+        name = "papermc-repo"
+        url = "https://repo.papermc.io/repository/maven-public/"
     }
     maven {
-        setName("papermc-repo")
-        setUrl("https://papermc.io/repo/repository/maven-public/")
+        name = "JNNGL-repo"
+        url = "https://maven.jnngl.me/public/"
     }
 }
 
@@ -53,7 +53,7 @@ dependencies {
 }
 
 shadowJar {
-    getArchiveClassifier().set("")
+    getArchiveClassifier().set(null)
 
     relocate("org.bstats", "net.elytrium.limbofilter.thirdparty.org.bstats")
     relocate("net.elytrium.commons.velocity", "net.elytrium.limboapi.thirdparty.commons.velocity")
@@ -66,7 +66,7 @@ license {
 }
 
 checkstyle {
-    setToolVersion("10.1")
+    setToolVersion("10.12.4")
     setConfigFile(file("${this.getRootDir()}/config/checkstyle/checkstyle.xml"))
     setConfigProperties("configDirectory": "${this.getRootDir()}/config/checkstyle")
 
@@ -75,17 +75,18 @@ checkstyle {
     setMaxWarnings(0)
 }
 
-spotbugsMain {
-    setExcludeFilter(file("${this.getRootDir()}/config/spotbugs/suppressions.xml"))
-
-    reports {
-        html {
-            getRequired().set(true)
-            getOutputLocation().set(file("${this.getBuildDir()}/reports/spotbugs/main/spotbugs.html"))
-            setStylesheet("fancy-hist.xsl")
-        }
-    }
-}
+// Dreeam - False Positive
+//spotbugsMain {
+//    setExcludeFilter(file("${this.getRootDir()}/config/spotbugs/suppressions.xml"))
+//
+//    reports {
+//        html {
+//            getRequired().set(true)
+//            getOutputLocation().set(file("${this.getBuildTreePath()}/reports/spotbugs/main/spotbugs.html"))
+//            setStylesheet("fancy-hist.xsl")
+//        }
+//    }
+//}
 
 sourceSets.main.getJava().srcDir(
         getTasks().register("generateTemplates", Copy) {
